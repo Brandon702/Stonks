@@ -12,7 +12,6 @@ namespace Assets.Scripts
         private Rigidbody2D rb;
         public Animator animator;
         SpriteRenderer spriteRenderer;
-        private MenuController menuController;
         public PlayerController player;
         public Interactable interactable;
         [SerializeField] public float speed = 5f;
@@ -25,7 +24,6 @@ namespace Assets.Scripts
             rb = GetComponent<Rigidbody2D>();
             spriteRenderer = GetComponent<SpriteRenderer>();
             player = GetComponent<PlayerController>();
-            menuController = GameObject.Find("MenuController").GetComponent<MenuController>();
             text.SetActive(false);
         }
 

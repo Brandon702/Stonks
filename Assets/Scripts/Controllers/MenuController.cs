@@ -45,99 +45,8 @@ public class MenuController : MonoBehaviour
 
     private void OnEnable()
     {
-        menuTrackPlayer();
+        //menuTrackPlayer();
         audioController.Play("music");
-    }
-
-    private void menuTrackPlayer()
-    {
-        int trackPlay = UnityEngine.Random.Range(0, 2);
-        if (trackPlay == 1)
-        {
-            audioController.Play("Track10");
-            Debug.Log("Track 10 played");
-            playing = 10;
-        }
-        else
-        {
-            audioController.Play("Track7");
-            Debug.Log("Track 7 played");
-            playing = 7;
-        }
-    }
-
-    private void sceneTrackPlayer()
-    {
-        audioController.Stop("Track" + playing);
-        int trackPlay = UnityEngine.Random.Range(0, 2);
-        if (trackPlay == 1)
-        {
-            audioController.Play("Track5");
-            playing = 5;
-            Debug.Log("Track 5 played");
-        }
-        else
-        {
-            audioController.Play("Track9");
-            playing = 9;
-            Debug.Log("Track 9 played");
-        }
-    }
-
-    private void gameTrackPlayer()
-    {
-        audioController.Stop("Track" + playing);
-        int trackPlay = UnityEngine.Random.Range(0, 4);
-        if (trackPlay == 1)
-        {
-            audioController.Play("Track1");
-            Debug.Log("Track 1 played");
-            playing = 1;
-        }
-        else if (trackPlay == 2)
-        {
-            audioController.Play("Track2");
-            Debug.Log("Track 2 played");
-            playing = 2;
-        }
-        else if (trackPlay == 3)
-        {
-            audioController.Play("Track3");
-            Debug.Log("Track 3 played");
-            playing = 3;
-        }
-        else
-        {
-            audioController.Play("Track4");
-            Debug.Log("Track 4 played");
-            playing = 4;
-        }
-    }
-
-    public void gameOverTrackPlayer()
-    {
-        audioController.Stop("Track" + playing);
-        audioController.Play("Track6");
-        Debug.Log("Track 6 played");
-        playing = 6;
-    }
-
-    public void AmbientOnePlayer()
-    {
-        audioController.Play("Amb1");
-        Debug.Log("Amb1 Played");
-    }
-
-    public void AmbientTwoPlayer()
-    {
-        audioController.Play("Amb2");
-        Debug.Log("Amb2 Played");
-    }
-
-    public void AmbientThreePlayer()
-    {
-        audioController.Play("Amb3");
-        Debug.Log("Amb3 Played");
     }
 
     public void Disable()
@@ -151,8 +60,6 @@ public class MenuController : MonoBehaviour
     {
         Disable();
         GameController.Instance.state = eState.GAME;
-        Time.timeScale = 1;
-        sceneTrackPlayer();
         GamePanel.SetActive(true);
         Debug.Log("Start Game");
     }
