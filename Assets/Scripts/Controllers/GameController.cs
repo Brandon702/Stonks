@@ -111,11 +111,16 @@ public class GameController : MonoBehaviour
     public void updateGameBar()
     {
         cashNeeded = cashNeededStatic - (cash + investedCash);
+        foreach(Company company in companies)
+        {
+            investedCash += company.playerStockNum * company.stockVal;
+        }
         tmpVals[0].text = "Cash: \n$" + cash.ToString();
         tmpVals[1].text = "Invested Cash: \n$" + investedCash.ToString();
         tmpVals[2].text = "Gross Value: \n$" + (investedCash + cash).ToString();
         tmpVals[3].text = "Cash Needed: \n$" + cashNeeded;
         tmpVals[4].text = "Day " + day;
+        investedCash = 0;
     }
 }
 
