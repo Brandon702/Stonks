@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-//Increment & Decrement only apply to the first company in the list of companies
+//You can purchase stock & go into the negative of cash, which is not allowed
 
 public class Company : MonoBehaviour
 {
@@ -14,25 +14,44 @@ public class Company : MonoBehaviour
     public int playerStockNum;
     private TextMeshProUGUI[] tmproArr;
     private TMP_InputField inputField;
+    private GameController gameController;
+    private int savedInt;
 
     public void Awake()
     {
         UpdateValues();
         tmproArr = GetComponentsInChildren<TextMeshProUGUI>();
         inputField = GetComponentInChildren<TMP_InputField>();
+        gameController = GameObject.Find("GameController").GetComponentInChildren<GameController>();
     }
 
     public void Buy()
     {
         Debug.Log("Buy Pressed " + "Value: " + tmproArr[1].text + tmproArr[3].text);
-        if(!(numOfStock >= int.Parse(inputField.text)))
+        if ((int.Parse(inputField.text) * stockVal) < gameController.cash)
+        {
+            for(int i = 0; i > numOfStock; i++)
+            {
+                if((i * stockVal) > gameController.cash)
+                {
+                    break;
+                    savedInt = i - 1;
+                    inputField.text = savedInt.ToString();
+                }
+            }
+        }
+        if (!(numOfStock >= int.Parse(inputField.text)))
         {
             inputField.text = numOfStock.ToString();
         }
-
+        float totalValue = int.Parse(inputField.text) * stockVal;
+        gameController.cash -= totalValue;
         playerStockNum += int.Parse(inputField.text);
         numOfStock -= int.Parse(inputField.text);
+        stockVal = Mathf.Round(stockVal * 100f) / 100f;
+        gameController.cash = Mathf.Round(gameController.cash * 100f) / 100f;
         UpdateValues();
+        gameController.updateGameBar();
         inputField.text = "0";
     }
 
@@ -49,7 +68,11 @@ public class Company : MonoBehaviour
             numOfStock += int.Parse(inputField.text);
             playerStockNum -= int.Parse(inputField.text);
         }
+        float totalValue = int.Parse(inputField.text) * stockVal;
+        gameController.cash += totalValue;
+        stockVal = Mathf.Round(stockVal * 100f) / 100f;
         UpdateValues();
+        gameController.updateGameBar();
         inputField.text = "0";
     }
 
