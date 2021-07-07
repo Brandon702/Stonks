@@ -43,6 +43,8 @@ public class GameController : MonoBehaviour
         {
 
         }
+
+        cashNeeded = cashNeededStatic;
     }
     #endregion
 
@@ -56,18 +58,12 @@ public class GameController : MonoBehaviour
     bool forceOnce = true;
     public float investedCash = 0f;
     private TextMeshProUGUI[] tmpVals;
-    private float cashNeeded = 1000000;
-    private int day = 1;
+    public static float cashNeededStatic = 1000000f;
+    public float cashNeeded;
+    public int day = 1;
     private float timeElapsed = 0.0f;
-    private float timeLength = 20.0f;
+    private float timeLength = 5.0f;
     private Company[] companies;
-    void Start()
-    {
-        Screen.orientation = ScreenOrientation.LandscapeLeft;
-        tmpVals = GameObject.Find("MainObjects").GetComponentsInChildren<TextMeshProUGUI>();
-        updateGameBar();
-        companies = GameObject.Find("Companies").GetComponentsInChildren<Company>();
-    }
 
     void Update()
     {
@@ -82,16 +78,15 @@ public class GameController : MonoBehaviour
         //Game is running
         if (state == eState.GAME)
         {
-            timeElapsed += Time.fixedDeltaTime;
-            //Debug.Log(timeElapsed);
             if (forceOnce == true)
             {
                 GameSession();
-
                 forceOnce = false;
             }
-
-            if (timeElapsed > timeLength)
+            timeElapsed += Time.fixedDeltaTime;
+            //Debug.Log(timeElapsed);
+            updateGameBar();
+            if (timeElapsed >= timeLength)
             {
                 Debug.Log("Day Pased");
                 foreach (Company company in companies)
@@ -109,15 +104,18 @@ public class GameController : MonoBehaviour
     public void GameSession()
     {
         //Run once on game start things go here
+        tmpVals = GameObject.Find("MainObjects").GetComponentsInChildren<TextMeshProUGUI>();
+        companies = GameObject.Find("Companies").GetComponentsInChildren<Company>();
     }
 
     public void updateGameBar()
     {
-        cashNeeded = 1000000.00f - (cash + investedCash);
-        tmpVals[0].text = "Cash: " + cash.ToString();
-        tmpVals[1].text = "Invested Cash: " + investedCash.ToString();
-        tmpVals[2].text = "Cash Needed: " + cashNeeded;
-        tmpVals[3].text = "Day " + day;
+        cashNeeded = cashNeededStatic - (cash + investedCash);
+        tmpVals[0].text = "Cash: \n$" + cash.ToString();
+        tmpVals[1].text = "Invested Cash: \n$" + investedCash.ToString();
+        tmpVals[2].text = "Gross Value: \n$" + (investedCash + cash).ToString();
+        tmpVals[3].text = "Cash Needed: \n$" + cashNeeded;
+        tmpVals[4].text = "Day " + day;
     }
 }
 

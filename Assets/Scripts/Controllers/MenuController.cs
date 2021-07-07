@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class MenuController : MonoBehaviour
 {
@@ -26,6 +27,7 @@ public class MenuController : MonoBehaviour
     public AudioMixer mixer;
     public AudioController audioController;
     private int playing;
+    private TextMeshProUGUI endText;
 
     private void Start()
     {
@@ -43,11 +45,12 @@ public class MenuController : MonoBehaviour
         MainMenuPanel.SetActive(true);
         Time.timeScale = 0;
         GameController.Instance.state = eState.TITLE;
+        Screen.orientation = ScreenOrientation.LandscapeLeft;
     }
 
     private void Update()
     {
-        if (gameController.cash + gameController.investedCash >= 1000000)
+        if (gameController.cash + gameController.investedCash >= gameController.cashNeeded)
         {
             GameOver();
         }
@@ -75,12 +78,6 @@ public class MenuController : MonoBehaviour
         Debug.Log("Start Game");
     }
 
-    public void RestartGame()
-    {
-        ResetApplication();
-        StartGame();
-    }
-
     public void ResumeGame()
     {
         Disable();
@@ -95,6 +92,8 @@ public class MenuController : MonoBehaviour
         Disable();
         Time.timeScale = 0;
         GameOverPanel.SetActive(true);
+        endText = GameObject.Find("GameOverPanelText").GetComponentInChildren<TextMeshProUGUI>();
+        endText.text = "It took you " + gameController.day + " days to reach 1 million dollars";
         GameController.Instance.state = eState.GAMEOVER;
         Debug.Log("Game Over");
     }

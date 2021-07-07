@@ -27,27 +27,27 @@ public class Company : MonoBehaviour
 
     public void Buy()
     {
+        int val = int.Parse(inputField.text);
         Debug.Log("Buy Pressed " + "Value: " + tmproArr[1].text + tmproArr[3].text);
-        if ((int.Parse(inputField.text) * stockVal) < gameController.cash)
+        if ((val * stockVal) > gameController.cash)
         {
-            for(int i = 0; i > numOfStock; i++)
+            for(int i = val; i < numOfStock; i--)
             {
-                if((i * stockVal) > gameController.cash)
+                if((i * stockVal) <= gameController.cash)
                 {
+                    val = i;
                     break;
-                    savedInt = i - 1;
-                    inputField.text = savedInt.ToString();
                 }
             }
         }
-        if (!(numOfStock >= int.Parse(inputField.text)))
+        if (!(numOfStock >= val))
         {
-            inputField.text = numOfStock.ToString();
+            val = numOfStock;
         }
-        float totalValue = int.Parse(inputField.text) * stockVal;
+        float totalValue = val * stockVal;
         gameController.cash -= totalValue;
-        playerStockNum += int.Parse(inputField.text);
-        numOfStock -= int.Parse(inputField.text);
+        playerStockNum += val;
+        numOfStock -= val;
         stockVal = Mathf.Round(stockVal * 100f) / 100f;
         gameController.cash = Mathf.Round(gameController.cash * 100f) / 100f;
         UpdateValues();
@@ -100,9 +100,9 @@ public class Company : MonoBehaviour
     public void UpdateValues()
     {
         tmproArr = GetComponentsInChildren<TextMeshProUGUI>();
-        tmproArr[0].text = companyName + "";
-        tmproArr[1].text = "Stock Value $: " + stockVal.ToString() + "";
-        tmproArr[2].text = "Player Stock #: " + playerStockNum.ToString() + "";
-        tmproArr[3].text = numOfStock.ToString() + "# stocks";
+        tmproArr[0].text = companyName;
+        tmproArr[2].text = "Stock Value: \n$" + stockVal.ToString();
+        tmproArr[4].text = "Player Stock #: \n" + playerStockNum.ToString();
+        tmproArr[6].text = "Availiable Stocks: \n" + numOfStock.ToString();
     }
 }
