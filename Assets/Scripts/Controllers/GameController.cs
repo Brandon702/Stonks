@@ -54,17 +54,19 @@ public class GameController : MonoBehaviour
 
     //Dont touch these variables:
     bool forceOnce = true;
-    private float investedCash = 0f;
+    public float investedCash = 0f;
     private TextMeshProUGUI[] tmpVals;
     private float cashNeeded = 1000000;
     private int day = 1;
     private float timeElapsed = 0.0f;
-    private float timeLength = 45.0f;
+    private float timeLength = 20.0f;
+    private Company[] companies;
     void Start()
     {
         Screen.orientation = ScreenOrientation.LandscapeLeft;
         tmpVals = GameObject.Find("MainObjects").GetComponentsInChildren<TextMeshProUGUI>();
         updateGameBar();
+        companies = GameObject.Find("Companies").GetComponentsInChildren<Company>();
     }
 
     void Update()
@@ -92,6 +94,12 @@ public class GameController : MonoBehaviour
             if (timeElapsed > timeLength)
             {
                 Debug.Log("Day Pased");
+                foreach (Company company in companies)
+                {
+                    company.stockVal += 0.5f + UnityEngine.Random.Range((-(company.stockVal) * 0.1f), (company.stockVal * 0.15f));
+                    company.stockVal = Mathf.Round(company.stockVal * 100f) /100f;
+                    company.UpdateValues();
+                }
                 day++;
                 updateGameBar();
                 timeElapsed = 0.0f;

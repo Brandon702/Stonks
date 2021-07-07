@@ -13,6 +13,7 @@ public class MenuController : MonoBehaviour
     public GameObject CreditsPanel;
     public GameObject PausePanel;
     public GameObject InstructionsPanel;
+    public GameObject GameOverPanel;
     public GameObject GamePanel;
     public GameObject InteractionPanel;
 
@@ -35,12 +36,21 @@ public class MenuController : MonoBehaviour
         gameObjects.Add(PausePanel);
         gameObjects.Add(InstructionsPanel);
         gameObjects.Add(GamePanel);
+        gameObjects.Add(GameOverPanel);
         gameObjects.Add(InteractionPanel);
         //sceneController = GameObject.Find("SceneController").GetComponent<SceneController>();
         Disable();
         MainMenuPanel.SetActive(true);
         Time.timeScale = 0;
         GameController.Instance.state = eState.TITLE;
+    }
+
+    private void Update()
+    {
+        if (gameController.cash + gameController.investedCash >= 1000000)
+        {
+            GameOver();
+        }
     }
 
     private void OnEnable()
@@ -59,9 +69,16 @@ public class MenuController : MonoBehaviour
     public void StartGame()
     {
         Disable();
+        Time.timeScale = 1;
         GameController.Instance.state = eState.GAME;
         GamePanel.SetActive(true);
         Debug.Log("Start Game");
+    }
+
+    public void RestartGame()
+    {
+        ResetApplication();
+        StartGame();
     }
 
     public void ResumeGame()
@@ -71,6 +88,15 @@ public class MenuController : MonoBehaviour
         GamePanel.SetActive(true);
         GameController.Instance.state = eState.GAME;
         Debug.Log("Resume Game");
+    }
+
+    public void GameOver()
+    {
+        Disable();
+        Time.timeScale = 0;
+        GameOverPanel.SetActive(true);
+        GameController.Instance.state = eState.GAMEOVER;
+        Debug.Log("Game Over");
     }
 
     public void Options()
